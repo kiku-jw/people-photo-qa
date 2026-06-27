@@ -1,0 +1,32 @@
+[project]
+name = "people-photo-qa"
+version = "0.1.0"
+description = "Local-first QA and visible-cue annotation for consented portrait photo datasets"
+requires-python = ">=3.11"
+dependencies = [
+  "Pillow>=12.0.0"
+]
+license = "MIT"
+
+[project.optional-dependencies]
+cv = [
+  "opencv-python>=4.13.0.92",
+  "mediapipe>=0.10.35"
+]
+research = [
+  "deepface>=0.0.100",
+  "insightface>=1.0.1"
+]
+llm = [
+  "openai>=2.44.0"
+]
+
+[project.scripts]
+photoqa = "photoqa.cli:main"
+
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["photoqa*"]
