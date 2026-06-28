@@ -6,7 +6,14 @@ import argparse
 from pathlib import Path
 
 from photoqa.backends import backend_status
-from photoqa.workflow import analyze_photos, export_report, ingest_directory, init_database, schema_summary
+from photoqa.workflow import (
+    analyze_photos,
+    export_report,
+    import_benchmark_reviews,
+    ingest_directory,
+    init_database,
+    schema_summary,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -41,6 +48,11 @@ def build_parser() -> argparse.ArgumentParser:
     report_parser.add_argument("--db", required=True, type=Path)
     report_parser.add_argument("--out", required=True, type=Path)
     report_parser.add_argument("--limit", type=int)
+
+    import_parser = subparsers.add_parser("import-review", help="Import visible-cue benchmark reviews from JSON")
+    import_parser.add_argument("--db", required=True, type=Path)
+    import_parser.add_argument("--input", required=True, type=Path)
+    import_parser.add_argument("--score-version", default="manual-visible-cue-v1")
 
     schema_parser = subparsers.add_parser("schema", help="Print database tables")
     schema_parser.add_argument("--db", required=True, type=Path)
@@ -77,6 +89,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "export-report":
         count = export_report(args.db, args.out, args.limit)
         print(f"exported {count} rows to {args.out}")
+        return 0
+
+    if args.command == "import-review":
+        result = import_benchmark_reviews(args.db, args.input, args.score_version)
+        print(result)
         return 0
 
     if args.command == "schema":

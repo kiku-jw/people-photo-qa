@@ -10,6 +10,7 @@ The public scope is deliberately narrow: this is a photo QA and visible-cue anno
 python3 -m photoqa init-db --db photoqa.sqlite
 python3 -m photoqa ingest --db photoqa.sqlite --photos-dir /path/to/photos --consent-source "signed_consent_v1"
 python3 -m photoqa analyze --db photoqa.sqlite
+python3 -m photoqa import-review --db photoqa.sqlite --input review.json
 python3 -m photoqa export-report --db photoqa.sqlite --out report.csv
 ```
 
@@ -64,6 +65,42 @@ The schema includes nullable fields for future richer review:
 - `camera_engagement_proxy`
 
 The current MVP does not fill these with model claims. It stores `null` until a validated local CV or explicitly enabled VLM backend is added. That is intentional: missing evidence should remain missing evidence.
+
+## Import Benchmark Reviews
+
+Use `import-review` to load a human-reviewed or VLM-reviewed visible-cue benchmark JSON into the latest reportable scores:
+
+```bash
+python3 -m photoqa import-review --db photoqa.sqlite --input review.json
+python3 -m photoqa export-report --db photoqa.sqlite --out report.csv
+```
+
+Minimal JSON shape:
+
+```json
+{
+  "reviews": [
+    {
+      "subject_id": "person_001",
+      "scores": {
+        "visible_freshness_proxy": 8.5,
+        "visual_brief_fit": 8.0,
+        "image_expressiveness_proxy": 6.5,
+        "expression_readability_proxy": 8.0,
+        "gaze_directness_proxy": 8.0,
+        "camera_engagement_proxy": 7.0,
+        "appearance_descriptors_json": {
+          "pose": ["frontal"],
+          "lighting": ["even"]
+        }
+      },
+      "review_reasons": ["manual_visible_cue_benchmark"]
+    }
+  ]
+}
+```
+
+The importer rejects known unsafe keys such as `ethnicity_from_face`, `real_health_score`, `actual_extraversion`, `trustworthiness`, and `celebrity_similarity`.
 
 ## Optional Backends
 
