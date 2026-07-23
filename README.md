@@ -120,6 +120,7 @@ Use Python 3.11 or 3.12 for the full CV stack if wheels lag newer Python version
 - [Database schema](docs/database-schema.md)
 - [Model policy](docs/model-policy.md)
 - [Visible-cue policy](docs/visible-cue-policy.md)
+- [Visual retrieval evaluation](docs/visual-retrieval-evaluation.md)
 - [Publication review](docs/publication-review.md)
 - [VLM prompt](prompts/vlm-photo-reviewer.md)
 

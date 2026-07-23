@@ -43,11 +43,19 @@ These are image-scoped descriptors or review aids. They are not factual judgment
 
 These fields should only be used after human-rater calibration and should not be hard filters:
 
+- `visual_age_band`
+- `apparent_age_estimate`
+- `apparent_age_confidence`
 - `approachability_impression_in_image`
 - `image_expressiveness_proxy`
 - `visual_brief_fit`
 - `soft_feature_index`
 - `photo_presentation_quality`
+
+Apparent-age outputs are not substitutes for direct labels for a different
+retrieval objective. A task-specific visual brief must be evaluated against
+human judgments of that brief, not against a generic age bucket or another
+convenient proxy.
 
 ## Prohibited Automatic Outputs
 
